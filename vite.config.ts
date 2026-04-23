@@ -1,10 +1,13 @@
-import { defineConfig } from 'vite-plus';
+import { defineConfig } from "vite-plus";
 
 export default defineConfig({
-    test: { passWithNoTests: true },
-    run: {
-        tasks: {
-            test: { command: 'vp test --run' },
-        },
+  staged: {
+    "*": "vp check --fix",
+  },
+  test: { passWithNoTests: true },
+  run: {
+    tasks: {
+      test: { command: "vp test --run" },
     },
+  },
 });

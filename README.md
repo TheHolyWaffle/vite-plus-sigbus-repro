@@ -1,6 +1,6 @@
 # vite-plus 0.1.16+ SIGBUS reproduction
 
-Minimal reproduction for https://github.com/voidzero-dev/vite-plus/issues/1451.
+Minimal reproduction for https://github.com/voidzero-dev/vite-plus/issues/1453.
 
 ## What it shows
 
