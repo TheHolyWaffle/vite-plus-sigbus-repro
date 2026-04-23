@@ -1,0 +1,41 @@
+name: Reproduce SIGBUS
+on: [push, workflow_dispatch]
+
+jobs:
+  sigbus:
+    name: vp run test (cache on, /dev/shm=64m) — expected SIGBUS
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - name: Run heavy-I/O test in shm-constrained container
+        run: |
+          docker run --rm --shm-size=64m \
+            -v "$PWD":/work -w /work \
+            node:24.15.0 bash -c '
+              npm ci --prefer-offline 2>&1 | tail -3
+              echo "=== vp --version ==="
+              npx vp --version
+              echo "=== vp env current ==="
+              npx vp env current || true
+              echo "=== vp run (cache default = true) ==="
+              npx vp run --filter "*" test --no-cache
+              echo "=== exit: $? ==="
+            '
+
+  workaround:
+    name: vp run test with cache:false — expected success
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - name: Patch config to cache:false
+        run: |
+          sed -i "s|command: 'vp test --run' }|command: 'vp test --run', cache: false }|" vite.config.ts
+          cat vite.config.ts
+      - name: Run heavy-I/O test with cache disabled
+        run: |
+          docker run --rm --shm-size=64m \
+            -v "$PWD":/work -w /work \
+            node:24.15.0 bash -c '
+              npm ci --prefer-offline 2>&1 | tail -3
+              npx vp run --filter "*" test --no-cache
+            '

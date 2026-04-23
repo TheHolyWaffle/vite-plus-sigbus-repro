@@ -1,0 +1,19 @@
+{
+  "name": "vp-sigbus-repro",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "prepare": "vp config"
+  },
+  "devDependencies": {
+    "vite-plus": "0.1.19"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "packageManager": "npm@11.13.0"
+}
